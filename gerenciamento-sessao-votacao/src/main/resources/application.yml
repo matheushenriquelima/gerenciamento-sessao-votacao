@@ -16,3 +16,7 @@ spring:
 
 queue:
   name: resultados
+
+application:
+  feign:
+    url-users: https://user-info.herokuapp.com/users
