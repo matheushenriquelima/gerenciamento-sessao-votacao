@@ -1,0 +1,143 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: http://localhost:8080
+    description: Generated server url
+paths:
+  /api/votos:
+    post:
+      tags:
+        - voto-resource
+      summary: Cadastra um voto na pauta do id informado
+      operationId: cadastrar
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VotoDTO'
+        required: true
+      responses:
+        '201':
+          description: O Cadastro do voto foi feito com sucesso
+        '400':
+          description: Houve algum erro de regra de negócio
+        '500':
+          description: Foi gerada uma exceção
+  /api/pautas:
+    post:
+      tags:
+        - pauta-resource
+      summary: Cadastra uma pauta
+      operationId: cadastrar_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PautaDTO'
+        required: true
+      responses:
+        '201':
+          description: O Cadastro da pauta foi feito com sucesso
+        '400':
+          description: Houve algum erro de regra de negócio
+        '500':
+          description: Foi gerada uma exceção
+  /api/pautas/habilitar-sessao:
+    post:
+      tags:
+        - pauta-resource
+      summary: Habilita uma sessão de votação na pauta do id informado e com o tempo informado, caso não informe o tempo ele será de 1 minuto
+      operationId: habilitarSessao
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessaoDTO'
+        required: true
+      responses:
+        '200':
+          description: A sessão foi habilitada com sucesso
+        '400':
+          description: Houve algum erro de regra de negócio
+        '500':
+          description: Foi gerada uma exceção
+  /api/resultados:
+    get:
+      tags:
+        - resultado-resource
+      summary: Obtem o resultado da pauta informado pelo id
+      operationId: obterPorPautaId
+      parameters:
+        - name: pautaId
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: O resultado foi obtido com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultadoDTO'
+        '400':
+          description: Houve algum erro de regra de negócio
+        '500':
+          description: Foi gerada uma exceção
+components:
+  schemas:
+    VotoDTO:
+      required:
+        - cpfAssociado
+        - pautaId
+        - voto
+      type: object
+      properties:
+        pautaId:
+          type: integer
+          format: int64
+        cpfAssociado:
+          type: string
+        voto:
+          type: string
+    PautaDTO:
+      required:
+        - titulo
+      type: object
+      properties:
+        titulo:
+          maxLength: 100
+          minLength: 0
+          type: string
+        descricao:
+          maxLength: 255
+          minLength: 0
+          type: string
+    SessaoDTO:
+      required:
+        - pautaId
+      type: object
+      properties:
+        pautaId:
+          type: integer
+          format: int64
+        tempoMinutos:
+          type: integer
+          format: int32
+    ResultadoDTO:
+      type: object
+      properties:
+        pautaId:
+          type: integer
+          format: int64
+        pautaNome:
+          type: string
+        votosSim:
+          type: integer
+          format: int64
+        votosNao:
+          type: integer
+          format: int64
