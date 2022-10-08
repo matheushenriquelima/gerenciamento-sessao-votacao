@@ -8,17 +8,20 @@ import com.matheuslima.gerenciamentovotacao.service.mapper.PautaMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
+import static com.matheuslima.gerenciamentovotacao.service.utils.MessageUtils.PAUTA_ENVIADA;
 import static com.matheuslima.gerenciamentovotacao.service.utils.MessageUtils.PAUTA_NAO_ATIVA;
 import static com.matheuslima.gerenciamentovotacao.service.utils.MessageUtils.PAUTA_NAO_ENCONTRADA;
+import static com.matheuslima.gerenciamentovotacao.service.utils.MessageUtils.VOTO_DUPLICIDADE;
 
 @Service
 @RequiredArgsConstructor
 public class PautaService {
-
     private final PautaRepository repository;
     private final PautaMapper mapper;
 
@@ -35,29 +38,52 @@ public class PautaService {
     }
 
     public void habilitarSessao(SessaoDTO sessaoDTO){
-        repository.findById(sessaoDTO.getPautaId()).ifPresentOrElse(pauta -> {
-            pauta.setAtivo(Boolean.TRUE);
-            pauta.setTempoDeterminado(LocalDateTime.now().plusMinutes(obterMinutos(sessaoDTO.getTempoMinutos())));
-            repository.save(pauta);
+        obterPorId(sessaoDTO.getPautaId()).ifPresentOrElse(pauta -> {
+            if(!pauta.getEnviado()){
+                pauta.setAtivo(Boolean.TRUE);
+                pauta.setTempoDeterminado(LocalDateTime.now().plusMinutes(obterMinutos(sessaoDTO.getTempoMinutos())));
+                repository.save(pauta);
+            }
+            else {
+                emitirPautaNaoEncontrada(MessageFormat.format(PAUTA_ENVIADA, sessaoDTO.getPautaId()));
+            }
         }, () -> {
-            throw new RegraNegocioException(PAUTA_NAO_ENCONTRADA);
+            emitirPautaNaoEncontrada(PAUTA_NAO_ENCONTRADA);
         });
     }
+
+    private Optional<Pauta> obterPorId(Long id) {
+        return repository.findById(id);
+    }
+
     public List<Pauta> obterPautasAtivas(){
         return repository.obterPautasPorAtivo(Boolean.TRUE);
     }
 
     public void validarPauta(Long pautaId){
-        repository.findById(pautaId).ifPresentOrElse(pauta -> validarPautaAtiva(pauta),
+        obterPorId(pautaId).ifPresentOrElse(PautaService::validarPautaAtiva,
                 () -> {
-            throw new RegraNegocioException(PAUTA_NAO_ENCONTRADA);
-        });
+                    emitirPautaNaoEncontrada(PAUTA_NAO_ENCONTRADA);
+                });
     }
-    private static void validarPautaAtiva(Pauta pauta) {
-        if(!pauta.getAtivo()){
-            throw new RegraNegocioException(PAUTA_NAO_ATIVA);
+
+    private static void emitirPautaNaoEncontrada(String mensagem) {
+        throw new RegraNegocioException(mensagem);
+    }
+
+    public void validarDuplicidadeVoto(Long pautaId, String cpf){
+        Boolean isInvalid = repository.existeVotoCpfEmPauta(pautaId, cpf);
+        if(isInvalid){
+            emitirPautaNaoEncontrada(VOTO_DUPLICIDADE);
         }
     }
+
+    private static void validarPautaAtiva(Pauta pauta) {
+        if(!pauta.getAtivo()){
+            emitirPautaNaoEncontrada(PAUTA_NAO_ATIVA);
+        }
+    }
+
     private Integer obterMinutos(Integer minutos){
         return Objects.nonNull(minutos) ? minutos : 1;
     }
