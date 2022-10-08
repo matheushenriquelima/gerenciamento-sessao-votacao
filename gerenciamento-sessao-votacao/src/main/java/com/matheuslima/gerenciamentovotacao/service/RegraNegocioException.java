@@ -14,5 +14,4 @@ public class RegraNegocioException extends RuntimeException {
         super(message, cause);
     }
 
-
 }
