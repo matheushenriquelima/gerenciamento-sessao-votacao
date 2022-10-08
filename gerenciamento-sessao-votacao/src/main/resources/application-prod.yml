@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${GSV_USERNAME}
+    password: ${GSV_DATABASE_PASSWORD}
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+    hibernate:
+      ddl-auto: update
+  rabbitmq:
+    host: ${GSV_RABBIT_HOST}
+    port: ${GSV_RABBIT_PORT}
+    username: ${GSV_RABBIT_USERNAME}
+    password: ${GSV_RABBIT_PASSWORD}
