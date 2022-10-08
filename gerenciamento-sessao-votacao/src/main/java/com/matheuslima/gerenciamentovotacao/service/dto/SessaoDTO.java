@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class SessaoDTO {
 
-    @NotNull
+    @NotNull(message = "O campo 'pautaId' é obrigatório")
     private Long pautaId;
     private Integer tempoMinutos;
 }
