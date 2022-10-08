@@ -10,11 +10,11 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class VotoDTO {
 
-    @NotNull
+    @NotNull(message = "O campo 'pautaId' é obrigatório")
     private Long pautaId;
-    @NotNull
+    @NotNull(message = "O campo 'cpfAssociado' é obrigatório")
     @CPF
     private String cpfAssociado;
-    @NotNull
+    @NotNull(message = "O campo 'voto' é obrigatório")
     private String voto;
 }

@@ -28,7 +28,8 @@ public class VotoService {
 
     public void cadastrar(VotoDTO votoDTO){
         pautaService.validarPauta(votoDTO.getPautaId());
-        validarCpfStatus(usersClient.obterCpfStatus(votoDTO.getCpfAssociado()).getBody());
+        pautaService.validarDuplicidadeVoto(votoDTO.getPautaId(), votoDTO.getCpfAssociado());
+        validarCpfStatus(Objects.requireNonNull(usersClient.obterCpfStatus(votoDTO.getCpfAssociado()).getBody()));
         Voto voto = mapper.toEntity(votoDTO);
         voto.setVoto(getVotoEnum(votoDTO.getVoto()));
         repository.save(voto);

@@ -2,24 +2,24 @@ package com.matheuslima.gerenciamentovotacao.web.rest;
 
 import com.matheuslima.gerenciamentovotacao.service.VotoService;
 import com.matheuslima.gerenciamentovotacao.service.dto.VotoDTO;
+import com.matheuslima.gerenciamentovotacao.web.operations.VotoOperations;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
+import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/votos")
-public class VotoResource {
+@Slf4j
+public class VotoResource implements VotoOperations {
     private final VotoService service;
 
-    @PostMapping
-    public ResponseEntity<Void> cadastrar(@Valid @RequestBody VotoDTO votoDTO){
+    @Override
+    public ResponseEntity<Void> cadastrar(VotoDTO votoDTO){
+        log.debug("Requisição rest para cadastrar voto em uma pauta: {}", votoDTO);
         service.cadastrar(votoDTO);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.created(URI.create("/api/votos")).build();
     }
 }
