@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
 
-@RequestMapping("/api/pautas")
+@RequestMapping("${api.version}/pautas")
 public interface PautaOperations {
 
     @Operation(summary = "Cadastra uma pauta")

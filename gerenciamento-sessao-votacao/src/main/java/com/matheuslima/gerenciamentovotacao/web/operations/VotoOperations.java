@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
 
-@RequestMapping("/api/votos")
+@RequestMapping("${api.version}/votos")
 public interface VotoOperations {
 
     @Operation(summary = "Cadastra um voto na pauta do id informado")

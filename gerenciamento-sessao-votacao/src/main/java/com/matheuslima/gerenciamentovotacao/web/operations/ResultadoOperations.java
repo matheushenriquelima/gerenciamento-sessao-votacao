@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.websocket.server.PathParam;
 
-@RequestMapping("/api/resultados")
+@RequestMapping("${api.version}/resultados")
 public interface ResultadoOperations {
 
     @Operation(summary = "Obtem o resultado da pauta informado pelo id")
