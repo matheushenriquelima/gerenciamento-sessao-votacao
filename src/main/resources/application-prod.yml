@@ -8,7 +8,4 @@ spring:
     hibernate:
       ddl-auto: update
   rabbitmq:
-    host: ${GSV_RABBIT_HOST}
-    port: ${GSV_RABBIT_PORT}
-    username: ${GSV_RABBIT_USERNAME}
-    password: ${GSV_RABBIT_PASSWORD}
+    addresses: ${CLOUDAMQP_URL}
