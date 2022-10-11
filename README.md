@@ -13,4 +13,5 @@ Link: https://gsv-application.herokuapp.com/
 - OpenFeign 
 - RabbitMQ 
 - PostgreSQL(Prod) e H2(Dev) 
-
+- Junit e Mockito
+- Docker
