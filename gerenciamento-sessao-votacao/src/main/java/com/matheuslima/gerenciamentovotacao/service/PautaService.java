@@ -45,10 +45,10 @@ public class PautaService {
                 repository.save(pauta);
             }
             else {
-                emitirPautaNaoEncontrada(MessageFormat.format(PAUTA_ENVIADA, sessaoDTO.getPautaId()));
+                emitirExcecao(MessageFormat.format(PAUTA_ENVIADA, sessaoDTO.getPautaId()));
             }
         }, () -> {
-            emitirPautaNaoEncontrada(PAUTA_NAO_ENCONTRADA);
+            emitirExcecao(PAUTA_NAO_ENCONTRADA);
         });
     }
 
@@ -63,24 +63,24 @@ public class PautaService {
     public void validarPauta(Long pautaId){
         obterPorId(pautaId).ifPresentOrElse(PautaService::validarPautaAtiva,
                 () -> {
-                    emitirPautaNaoEncontrada(PAUTA_NAO_ENCONTRADA);
+                    emitirExcecao(PAUTA_NAO_ENCONTRADA);
                 });
     }
 
-    private static void emitirPautaNaoEncontrada(String mensagem) {
+    private static void emitirExcecao(String mensagem) {
         throw new RegraNegocioException(mensagem);
     }
 
     public void validarDuplicidadeVoto(Long pautaId, String cpf){
         Boolean isInvalid = repository.existeVotoCpfEmPauta(pautaId, cpf);
         if(isInvalid){
-            emitirPautaNaoEncontrada(VOTO_DUPLICIDADE);
+            emitirExcecao(VOTO_DUPLICIDADE);
         }
     }
 
     private static void validarPautaAtiva(Pauta pauta) {
         if(!pauta.getAtivo()){
-            emitirPautaNaoEncontrada(PAUTA_NAO_ATIVA);
+            emitirExcecao(PAUTA_NAO_ATIVA);
         }
     }
 
