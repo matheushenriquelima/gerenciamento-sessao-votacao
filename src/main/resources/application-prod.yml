@@ -9,3 +9,6 @@ spring:
       ddl-auto: update
   rabbitmq:
     addresses: ${CLOUDAMQP_URL}
+    virtual-host: kbsiigfy
+    password: WMD3uH1YwCzOWVud3rY9XQmz4roEGJ_s
+    port: 5672
