@@ -2,7 +2,9 @@ package com.matheuslima.gerenciamentovotacao.builder;
 
 import com.matheuslima.gerenciamentovotacao.domain.Voto;
 import com.matheuslima.gerenciamentovotacao.domain.VotoEnum;
+import com.matheuslima.gerenciamentovotacao.service.dto.UserDTO;
 import com.matheuslima.gerenciamentovotacao.service.dto.VotoDTO;
+import com.matheuslima.gerenciamentovotacao.service.utils.CpfValidoUtils;
 
 public class VotoBuilder {
 
@@ -21,5 +23,11 @@ public class VotoBuilder {
         votoDTO.setCpfAssociado("85670414063");
         votoDTO.setVoto("Sim");
         return votoDTO;
+    }
+
+    public static UserDTO construirUserDTO() {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setStatus(CpfValidoUtils.ABLE_TO_VOTE);
+        return userDTO;
     }
 }
