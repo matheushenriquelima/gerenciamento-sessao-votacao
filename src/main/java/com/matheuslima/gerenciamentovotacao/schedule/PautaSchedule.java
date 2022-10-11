@@ -22,7 +22,12 @@ public class PautaSchedule {
     private final PautaService service;
     private final QueueSenderService senderService;
 
-    @Scheduled(fixedDelay = 1000, initialDelay = 60000)
+    /**
+     * Aqui foi criado uma rotina para verificar quais pautas estão ativas
+     * e que tiveram o tempo determinado finalizado.
+     * Essa rotina é executada a cada segundo de forma a ser mais preciso com o tempo da sessão
+     */
+    @Scheduled(fixedDelay = 1000)
     public void fecharPautas() {
         service.obterPautasAtivas().stream()
                 .filter(this::validarPauta).forEach(pauta -> {

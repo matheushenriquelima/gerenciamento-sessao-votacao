@@ -17,6 +17,10 @@ public class ResultadoQueueConsumer {
     @Autowired
     private ResultadoService resultadoService;
 
+    /**
+     * Neste consumer, os dados de mensagem enviado para a fila é consumido.
+     * Em seguida os dados são transformados para um DTO que em seguida é salvo na base.
+     */
     @RabbitListener(queues = {"${queue.name}"})
     public void consumir(@Payload String mensagem) throws JsonProcessingException {
         log.info("Consumindo mensagem {}", mensagem);

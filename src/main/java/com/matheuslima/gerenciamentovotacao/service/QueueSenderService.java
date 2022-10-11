@@ -14,6 +14,10 @@ public class QueueSenderService {
     private final RabbitTemplate rabbitTemplate;
     private final Exchange exchange;
 
+    /**
+     * Este método é responsável por transforma um resultado dto em string para
+     * enviar como uma mensagem simples para a fila.
+     */
     public void enviarResultadoParaRabbit(ResultadoDTO resultadoDTO){
         try {
             String json = new ObjectMapper().writeValueAsString(resultadoDTO);
