@@ -3,6 +3,7 @@ package com.matheuslima.gerenciamentovotacao.service;
 import com.matheuslima.gerenciamentovotacao.domain.Voto;
 import com.matheuslima.gerenciamentovotacao.domain.VotoEnum;
 import com.matheuslima.gerenciamentovotacao.repository.VotoRepository;
+import com.matheuslima.gerenciamentovotacao.service.dto.ResponseCreatedDTO;
 import com.matheuslima.gerenciamentovotacao.service.dto.UserDTO;
 import com.matheuslima.gerenciamentovotacao.service.dto.VotoDTO;
 import com.matheuslima.gerenciamentovotacao.service.feign.UsersClient;
@@ -26,13 +27,13 @@ public class VotoService {
     private final VotoMapper mapper;
     private final UsersClient usersClient;
 
-    public void cadastrar(VotoDTO votoDTO){
+    public ResponseCreatedDTO cadastrar(VotoDTO votoDTO){
         pautaService.validarPauta(votoDTO.getPautaId());
         pautaService.validarDuplicidadeVoto(votoDTO.getPautaId(), votoDTO.getCpfAssociado());
         validarCpfStatus(Objects.requireNonNull(usersClient.obterCpfStatus(votoDTO.getCpfAssociado()).getBody()));
         Voto voto = mapper.toEntity(votoDTO);
         voto.setVoto(getVotoEnum(votoDTO.getVoto()));
-        repository.save(voto);
+        return mapper.toResponse(repository.save(voto));
     }
 
     private void validarCpfStatus(UserDTO userDTO){

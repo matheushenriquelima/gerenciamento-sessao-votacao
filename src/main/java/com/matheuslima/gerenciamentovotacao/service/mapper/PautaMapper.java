@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
-public interface PautaMapper {
+public interface PautaMapper extends ResponseMapper<Pauta> {
 
     @Mapping(target = "votos", ignore = true)
     @Mapping(target = "ativo", ignore = true)

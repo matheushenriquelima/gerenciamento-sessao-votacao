@@ -1,6 +1,7 @@
 package com.matheuslima.gerenciamentovotacao.web.rest;
 
 import com.matheuslima.gerenciamentovotacao.service.VotoService;
+import com.matheuslima.gerenciamentovotacao.service.dto.ResponseCreatedDTO;
 import com.matheuslima.gerenciamentovotacao.service.dto.VotoDTO;
 import com.matheuslima.gerenciamentovotacao.web.operations.VotoOperations;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +18,10 @@ public class VotoResource implements VotoOperations {
     private final VotoService service;
 
     @Override
-    public ResponseEntity<Void> cadastrar(VotoDTO votoDTO){
+    public ResponseEntity<ResponseCreatedDTO> cadastrar(VotoDTO votoDTO){
         log.debug("Requisição rest para cadastrar voto em uma pauta: {}", votoDTO);
-        service.cadastrar(votoDTO);
-        return ResponseEntity.created(URI.create("/api/votos")).build();
+        ResponseCreatedDTO body = service.cadastrar(votoDTO);
+        return ResponseEntity.created(URI.create("/api/votos"))
+                .body(body);
     }
 }

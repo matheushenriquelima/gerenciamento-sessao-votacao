@@ -3,6 +3,7 @@ package com.matheuslima.gerenciamentovotacao.service;
 import com.matheuslima.gerenciamentovotacao.domain.Pauta;
 import com.matheuslima.gerenciamentovotacao.repository.PautaRepository;
 import com.matheuslima.gerenciamentovotacao.service.dto.PautaDTO;
+import com.matheuslima.gerenciamentovotacao.service.dto.ResponseCreatedDTO;
 import com.matheuslima.gerenciamentovotacao.service.dto.SessaoDTO;
 import com.matheuslima.gerenciamentovotacao.service.mapper.PautaMapper;
 import lombok.RequiredArgsConstructor;
@@ -25,16 +26,17 @@ public class PautaService {
     private final PautaRepository repository;
     private final PautaMapper mapper;
 
-    public void cadastrar(PautaDTO pautaDTO){
-        salvar(mapper.toEntity(pautaDTO));
+    public ResponseCreatedDTO cadastrar(PautaDTO pautaDTO){
+        Pauta pauta = salvar(mapper.toEntity(pautaDTO));
+        return mapper.toResponse(pauta);
     }
 
     public void atualizar(Pauta pauta){
         salvar(pauta);
     }
 
-    private void salvar(Pauta pauta){
-        repository.save(pauta);
+    private Pauta salvar(Pauta pauta){
+        return repository.save(pauta);
     }
 
     public void habilitarSessao(SessaoDTO sessaoDTO){

@@ -1,7 +1,10 @@
 package com.matheuslima.gerenciamentovotacao.web.operations;
 
+import com.matheuslima.gerenciamentovotacao.service.dto.ResponseCreatedDTO;
 import com.matheuslima.gerenciamentovotacao.service.dto.VotoDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +19,12 @@ public interface VotoOperations {
 
     @Operation(summary = "Cadastra um voto na pauta do id informado")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description  = "O Cadastro do voto foi feito com sucesso"),
+            @ApiResponse(responseCode = "201", description  = "O Cadastro do voto foi feito com sucesso", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseCreatedDTO.class))
+            }),
             @ApiResponse(responseCode = "400", description  = "Houve algum erro de regra de negócio"),
             @ApiResponse(responseCode = "500", description  = "Foi gerada uma exceção")
     })
     @RequestMapping(method = RequestMethod.POST, consumes="application/json")
-    ResponseEntity<Void> cadastrar(@Valid @RequestBody VotoDTO votoDTO);
+    ResponseEntity<ResponseCreatedDTO> cadastrar(@Valid @RequestBody VotoDTO votoDTO);
 }

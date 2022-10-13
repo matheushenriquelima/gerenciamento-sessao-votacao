@@ -1,8 +1,11 @@
 package com.matheuslima.gerenciamentovotacao.web.operations;
 
 import com.matheuslima.gerenciamentovotacao.service.dto.PautaDTO;
+import com.matheuslima.gerenciamentovotacao.service.dto.ResponseCreatedDTO;
 import com.matheuslima.gerenciamentovotacao.service.dto.SessaoDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +20,14 @@ public interface PautaOperations {
 
     @Operation(summary = "Cadastra uma pauta")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description  = "O Cadastro da pauta foi feito com sucesso"),
+            @ApiResponse(responseCode = "201", description  = "O Cadastro da pauta foi feito com sucesso", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseCreatedDTO.class))
+            }),
             @ApiResponse(responseCode = "400", description  = "Houve algum erro de regra de negócio"),
             @ApiResponse(responseCode = "500", description  = "Foi gerada uma exceção")
     })
     @RequestMapping(method = RequestMethod.POST, consumes="application/json")
-    ResponseEntity<Void> cadastrar(@Valid @RequestBody PautaDTO pautaDTO);
+    ResponseEntity<ResponseCreatedDTO> cadastrar(@Valid @RequestBody PautaDTO pautaDTO);
 
     @Operation(summary = "Habilita uma sessão de votação na pauta do id informado e com o tempo informado, caso não informe o tempo ele será de 1 minuto")
     @ApiResponses(value = {

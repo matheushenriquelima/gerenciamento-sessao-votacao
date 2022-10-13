@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
-public interface VotoMapper {
+public interface VotoMapper extends ResponseMapper<Voto> {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "voto", ignore = true)
